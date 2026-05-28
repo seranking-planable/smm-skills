@@ -17,31 +17,37 @@ These skills follow [Anthropic's Agent Skills spec](https://platform.claude.com/
 
 Two skills work without a Planable account by accepting a CSV export from any analytics tool: `monthly-performance-summary` and `content-pattern-intelligence`.
 
-## Install as a Claude Code plugin
+## Install
 
-This repo is also packaged as a [Claude Code plugin](https://code.claude.com/docs/en/plugins) named `planable-smm`. Installing it registers all six skills and auto-configures the Planable MCP server.
+This repo doubles as a [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces). Installing the `planable-smm` plugin registers all six skills and auto-configures the Planable remote MCP server in one step.
 
-Once approved in the community marketplace:
+### Claude Code (terminal)
 
-```
-/plugin marketplace add anthropics/claude-plugins-community
-/plugin install planable-smm@claude-community
-```
-
-To install directly from this repo before then:
-
-```
+```bash
 /plugin marketplace add Planable/smm-skills
-/plugin install planable-smm
+/plugin install planable-smm@planable
 ```
 
-After install, skills are namespaced — e.g. `/planable-smm:draft-post-batch` — and Claude picks the right one automatically based on the SKILL.md frontmatter.
+Skills appear under the `planable-smm` namespace — e.g. `/planable-smm:draft-post-batch`. Or just describe what you want (*"draft 5 LinkedIn posts for Acme"*, *"what's pending approval"*) and Claude picks the right skill automatically based on its frontmatter. Update later with `/plugin marketplace update planable`.
 
-## How to use (Claude.ai, Desktop, or other surfaces)
+### Claude Desktop
 
-1. Connect the [Planable MCP server](https://mcp.planable.io/mcp) to Claude (Pro, Max, or Teams plan; Planable Team plan or higher).
-2. Make these skills available to Claude — see [Anthropic's Agent Skills docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for installation in your surface (Claude.ai projects, Claude Desktop, Claude Code).
-3. Just describe what you want — Claude picks the right skill automatically based on its frontmatter.
+If you use Cowork in Claude Desktop, install via the UI:
+
+1. Open **Customize** in the sidebar.
+2. Click **Personal plugin** → **+ Create plugin**.
+3. Click **Add marketplace** and enter `Planable/smm-skills`.
+4. Install `planable-smm` once the marketplace loads.
+
+### Connect Planable
+
+The Planable remote MCP (`https://mcp.planable.io/mcp`) auto-registers when you install the plugin — there's no separate `claude mcp add` step. On your first session, run `/mcp` and sign in via OAuth. No API token to manage.
+
+If you don't have a Planable account yet, [sign up](https://planable.io) — a Team plan (or higher) is required for MCP access.
+
+### Claude.ai projects (manual)
+
+The plugin format is Claude Code / Desktop only. If you use Claude.ai projects instead, attach the individual `SKILL.md` files (or a zip of the `skills/` folder) to a Project — see [Anthropic's Agent Skills docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview). You'll also need to connect the [Planable MCP server](https://mcp.planable.io/mcp) separately via your Claude.ai integrations.
 
 ## How these skills chain
 
