@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "planable-smm",
+  "displayName": "Planable SMM",
+  "version": "1.0.0",
+  "description": "Production-ready skills for social media managers using Planable: draft post batches, clear the approval queue, audit the calendar, build monthly performance reports, compare clients, and surface content patterns.",
+  "author": {
+    "name": "Planable",
+    "url": "https://planable.io"
+  },
+  "homepage": "https://github.com/Planable/smm-skills",
+  "repository": "https://github.com/Planable/smm-skills",
+  "license": "MIT",
+  "keywords": [
+    "social-media",
+    "smm",
+    "planable",
+    "content-calendar",
+    "approvals",
+    "analytics",
+    "reporting",
+    "marketing"
+  ]
+}

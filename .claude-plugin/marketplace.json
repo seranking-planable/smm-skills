@@ -1,0 +1,51 @@
+{
+  "name": "planable",
+  "owner": {
+    "name": "Planable",
+    "url": "https://planable.io"
+  },
+  "metadata": {
+    "description": "Official Claude Code plugin marketplace from Planable. Skills for social media managers built on top of the Planable MCP server.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "planable-smm",
+      "source": "./",
+      "description": "Production-ready skills for social media managers using Planable: draft post batches, clear the approval queue, audit the calendar, build monthly performance reports, compare clients, and surface content patterns.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Planable",
+        "url": "https://planable.io"
+      },
+      "homepage": "https://github.com/Planable/smm-skills",
+      "repository": "https://github.com/Planable/smm-skills",
+      "license": "MIT",
+      "category": "marketing",
+      "tags": [
+        "social-media",
+        "smm",
+        "planable",
+        "mcp",
+        "claude-skills",
+        "agent-skills",
+        "content-calendar",
+        "approvals",
+        "analytics",
+        "reporting",
+        "marketing",
+        "agency"
+      ],
+      "keywords": [
+        "social-media",
+        "smm",
+        "planable",
+        "content-calendar",
+        "approvals",
+        "analytics",
+        "reporting",
+        "marketing"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "planable": {
+      "type": "http",
+      "url": "https://mcp.planable.io/mcp"
+    }
+  }
+}
