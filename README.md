@@ -64,6 +64,7 @@ A typical agency week:
 - **Claude plan**: Pro, Max, or Teams (Skills are not available on free tier).
 - **Planable plan**: MCP access on Team plan or higher. Analytics add-on required for the analytics columns in `cross-client-metrics-overview` and the Planable mode of `monthly-performance-summary` / `content-pattern-intelligence`.
 - **Permissions**: Skills inherit the connected user's Planable permissions.
+- **Optional X/Twitter research input**: Teams that already use OpenClaw can use [TweetClaw](https://www.npmjs.com/package/@xquik/tweetclaw) (`@xquik/tweetclaw`) to collect source material such as search tweets, search tweet replies, user lookup, or follower export summaries before drafting. Planable remains the place for drafts, approvals, scheduling, and publishing.
 - **Drafts only**: `draft-post-batch` creates drafts; nothing publishes to social platforms without explicit user action in Planable.
 
 ## Links
