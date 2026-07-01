@@ -4,6 +4,12 @@ All notable changes to the `planable-smm` plugin are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Optional X/Twitter research-input guidance for draft batches, with TweetClaw/OpenClaw as source material only while Planable remains the draft, approval, scheduling, and publishing workflow.
+
 ## [1.0.0] - 2026-05-28
 
 ### Added

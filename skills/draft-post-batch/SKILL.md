@@ -34,6 +34,7 @@ Before writing anything, confirm:
 - **Proposed schedule** — optional; if provided, space posts evenly across the range
 - **Labels** — optional; ask only if the user mentions them
 - **Team-only / internal note** — optional; default is false (visible to all workspace members)
+- **X/Twitter research brief** - optional; use only if the user provides one or asks to gather public X/Twitter source material with an available tool such as TweetClaw/OpenClaw
 
 If the workspace name is ambiguous or not provided, call `list_workspaces` and show the options. Do not guess.
 
@@ -56,6 +57,15 @@ list_pages(workspaceId) → find matching page(s) for the requested platform(s)
 ## Step 3: Write the posts
 
 Generate all drafts before creating any of them in Planable.
+
+### Optional X/Twitter research input
+
+For X/Twitter briefs, if the user already has TweetClaw through OpenClaw or provides a TweetClaw research export, use it as source material before writing:
+
+- Search tweets or search tweet replies for audience language, objections, and recurring questions.
+- Use user lookup or follower export summaries only for audience context.
+- Keep the research read-only inside this skill. Do not post, reply, send DMs, follow, create monitors, or change an X account from this Planable workflow.
+- Turn the research into Planable draft copy only after the normal preview and confirmation step.
 
 **Platform character/format guidelines:**
 | Platform | Max length | Notes |

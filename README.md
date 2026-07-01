@@ -88,6 +88,7 @@ A typical SEO-driven engagement (ecosystem skills):
 - **Planable plan**: MCP access on Team plan or higher. Analytics add-on required for the analytics columns in `cross-client-metrics-overview` and the Planable mode of `monthly-performance-summary` / `content-pattern-intelligence`.
 - **SE Ranking plan** (ecosystem skills only): MCP access on a plan that includes the Data API. Projects are required for ranking-loss detection, ongoing AI Result Tracker, and city-level rank tracking; one-off audits and AI Search snapshots work without a project. See the [SE Ranking MCP setup guide](https://seranking.com/api/integrations/mcp/).
 - **Permissions**: Skills inherit the connected user's Planable and SE Ranking permissions.
+- **Optional X/Twitter research input**: Teams that already use OpenClaw can use [TweetClaw](https://www.npmjs.com/package/@xquik/tweetclaw) (`@xquik/tweetclaw`) to collect source material such as search tweets, search tweet replies, user lookup, or follower export summaries before drafting. Planable remains the place for drafts, approvals, scheduling, and publishing.
 - **Drafts only**: `draft-post-batch` and the ecosystem campaign skills create drafts; nothing publishes to social platforms without explicit user action in Planable.
 
 ## Links
