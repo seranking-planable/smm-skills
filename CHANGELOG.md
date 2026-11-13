@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- Listing details for the Claude directory: display name "Planable", icon, and support, privacy and terms links.
+- Listing details for the Claude directory: an icon, and support, privacy and terms links.
 - `content-pattern-intelligence`: checks and refreshes post-level metrics (`get_post_metrics_summary`, `refresh_post_metrics`), treats refreshes as queued syncs that land after a few minutes, and checks fetched posts against `totalPosts`.
 
 ## [1.0.0] - 2026-05-28
