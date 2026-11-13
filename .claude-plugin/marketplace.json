@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Official Claude Code plugin marketplace from Planable. Skills for social media managers built on top of the Planable MCP server, plus cross-channel ecosystem skills that combine Planable with SE Ranking.",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "planable-smm",
       "source": "./",
       "description": "Production-ready skills for social media managers using Planable: draft post batches, clear the approval queue, audit the calendar, build monthly performance reports, compare clients, surface content patterns, and — with SE Ranking connected — turn SEO and AI-search gaps into social campaigns, coordinate page rewrites, run local/GBP visibility, build onboarding proposals, and generate unified SEO + AI + social reports.",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "Planable",
         "url": "https://planable.io"

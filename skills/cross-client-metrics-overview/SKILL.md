@@ -113,5 +113,5 @@ If the user wants per-client breakdowns, add a short block per workspace after t
 - **Unsupported platforms**: Google My Business and Threads don't return metrics via the connector. Note these per workspace in a "Data not available" footnote.
 - **Large workspace count (15+)**: Warn the user that fetching all workspaces may take a moment. Proceed unless they want to narrow scope.
 - **Single workspace accidentally**: If only one workspace is found or specified, suggest using the monthly-performance-summary skill instead — it's better suited for single-client reports.
-- **Mixed plan types**: Some Planable plans may have limited analytics access. If a workspace returns empty metrics, note that analytics may not be available on that workspace's plan and suggest checking Planable directly.
+- **Mixed plan types**: Analytics needs the analytics add-on. If a metrics tool rejects because the add-on is not active for a workspace, keep that workspace in the table as "No data — analytics add-on not active" and carry on with the others.
 - **Comparing incomparable periods**: If workspaces have different amounts of data (e.g., one client was just onboarded), flag this in the notes section.

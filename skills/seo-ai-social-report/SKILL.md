@@ -49,7 +49,7 @@ Confirm domain, Planable workspace, period, and competitors. Resolve the period 
 - `list_pages(workspaceId)` → page IDs.
 - `get_page_metrics_summary(workspaceId, pageIds, startDate, endDate)` — **account-level** audience/impressions/engagement-rate.
 - `get_post_metrics_summary(workspaceId, pageIds, startDate, endDate)` — **published-post** totals in the window. (Different scope from page impressions — keep them separate.)
-- `get_post_metrics(workspaceId, pageIds, ..., limit: 5)` — top posts.
+- `get_post_metrics(workspaceId, pageIds, ...)` — top posts: page through the period and rank the posts by engagement (it returns the newest posts first, so `limit: 5` alone gives the 5 newest, not the top 5).
 - `list_posts(...)` — posts published in the period (volume/cadence).
 - For a monthly social trend, call `get_page_metrics_summary` once per month bucket.
 

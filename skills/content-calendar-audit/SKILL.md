@@ -33,6 +33,17 @@ Review a Planable workspace's content schedule for a given period — what's rea
 
 ## Step 2: Fetch posts
 
+When the window is a calendar week or month, call `show_calendar` (`view: "week"` or `"month"`, with `date` inside the period) instead of the scheduled-posts `list_posts` call below. It returns every dated post grouped by day in the workspace timezone, each with a `status` (`draft`, `scheduled`, `approved`, `issues`, `published`) and `failedToPublish`:
+
+- Count only `scheduled` posts as confirmed for publishing. Other dated posts only have a proposed date, and `published` ones already went out.
+- `failedToPublish: true` marks a post whose publishing failed.
+- If `truncated` is true, the result holds only the first 150 of `totalCount` posts: fetch the remaining days with `list_posts` before calling any day empty.
+- In Claude chat the result shows as a calendar card, so in Step 3 skip the day-by-day overview and go straight to the gap analysis. In Claude Code and other clients without the card, list the posts by day as in Step 3.
+
+For any other window, such as the next 7 days or a custom range, use the `list_posts` calls below.
+
+`list_posts` results are paginated (25 per page by default, up to `limit: 100`). When you only need a count, such as undated drafts, read `totalCount` from the first page and pass `includeText: false`. Page through with `offset: nextOffset` (while `hasMore` is true) only for the posts you will list.
+
 ```
 list_workspaces → find workspaceId
 list_pages(workspaceId) → get pageIds for context
@@ -51,14 +62,20 @@ list_posts(
   postStatus: ["NO_DATE_SET"]
 )
 
-// Posts with publishing errors
+// Posts that failed to publish
+list_posts(
+  workspaceId,
+  postStatus: ["PUBLISHED_WITH_ERRORS"]
+)
+
+// Posts with incompatible content that can't publish as they are (e.g. Instagram without media)
 list_posts(
   workspaceId,
   postStatus: ["WITH_ERRORS"]
 )
 ```
 
-Also check for posts needing approval that are scheduled soon:
+If the workspace has an approval workflow (`approvalWorkflow` from `get_workspace_details` is not "none"), also check for posts needing approval that are scheduled soon:
 ```
 list_posts(
   workspaceId,
@@ -100,7 +117,7 @@ After the calendar view, add a short summary:
 - **Total posts scheduled:** [n] across [n] platforms
 - **Days with no content:** list them
 - **Posts with no date set:** [n] drafts not yet placed on the calendar
-- **Posts with errors:** [n] — list them with platform and preview
+- **Posts with errors:** [n] — list them with platform and preview, keeping failed-to-publish posts apart from posts with incompatible content
 - **Posts scheduled but not yet approved:** [n] — flag urgency if within 24–48h
 
 ### Recommendations
@@ -127,4 +144,4 @@ After the audit, offer:
 - **Many workspaces**: If the user asks to audit "all clients", loop through workspaces and produce one summary section per workspace. Warn if there are more than 5 — it may take a moment.
 - **Empty calendar**: If nothing is scheduled, say so directly. Offer to draft posts if appropriate.
 - **Recurring / synced posts**: Grouped posts show as one unit — note this if multiple platforms are covered by a single grouped post.
-- **Time zones**: Scheduled times are returned in UTC. If the user's timezone is known, convert. Otherwise, note that times shown are UTC.
+- **Time zones**: `list_posts` returns scheduled times in UTC. If the user's timezone is known, convert. Otherwise, note that times shown are UTC. `show_calendar` already uses the workspace timezone.
