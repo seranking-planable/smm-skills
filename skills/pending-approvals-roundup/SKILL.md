@@ -48,11 +48,13 @@ list_posts(
 | Status | Meaning |
 |---|---|
 | `PENDING_MY_APPROVAL` | Posts where this user is a required approver |
-| `NOT_APPROVED` | Posts with no approvals yet |
+| `NOT_APPROVED` | Posts that are not fully approved yet (partially approved ones included) |
 | `PARTIAL_APPROVED` | Posts with some but not all required approvals |
-| `REQUESTED_BY_ME` | Posts where this user requested approval from others |
+| `REQUESTED_BY_ME` | Posts where this user requested approval from others (can include posts approved since) |
 
 If the user wants a broader view, query `NOT_APPROVED` and `PARTIAL_APPROVED` together.
+
+Results are paginated (25 posts per page by default; pass `limit: 100` to need fewer calls). While `hasMore` is true, call `list_posts` again with `offset: nextOffset` so no pending post is missed. For the broader view, the first page's `totalCount` says how many posts match: if there are more than about 50, show the count and the most urgent posts, and ask before listing them all.
 
 ---
 
@@ -90,7 +92,9 @@ After showing results, offer:
 - "Want me to show you the full text of any of these?"
 - "Should I check a specific workspace in more detail?"
 
-Do NOT offer to approve posts — approval actions are not available via the connector.
+- "Want me to approve any of these, or send one back with a comment?" — approve with `approve_post`. To send a waiting post back, add the reason with `create_comment` (`teamOnly: true` keeps it from the client). Do not use `disapprove_post` here: it only revokes an approval a post already has, and on a post that is still waiting it changes nothing.
+
+Approve only the posts the user names, after they confirm. This needs an approval workflow in the workspace (`approvalWorkflow` from `get_workspace_details` is not "none") and the user's approve permission. Before approving, mention that approving can auto-schedule the post if the workspace is set up that way, and that a post with a `groupId` (created for several pages at once) is approved together with every post in its group.
 
 ---
 
@@ -98,4 +102,4 @@ Do NOT offer to approve posts — approval actions are not available via the con
 
 - **Many workspaces**: If `list_workspaces` returns more than 10, ask the user to confirm scope before fetching each one. Fetching 20+ workspaces sequentially is slow and may not be what they want.
 - **No workspace specified**: Default to checking the 5 most recently active workspaces unless the user says "all clients."
-- **Scheduled posts with errors**: If `WITH_ERRORS` posts appear in results, call them out separately — these are likely blocking issues.
+- **Posts with problems**: posts that failed to publish (`PUBLISHED_WITH_ERRORS`) and posts with incompatible content (`WITH_ERRORS`, such as an Instagram post without media) are likely blocking issues — call them out separately if the user asks for them or they show up.

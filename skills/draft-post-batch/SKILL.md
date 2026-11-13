@@ -1,7 +1,7 @@
 ---
 name: draft-post-batch
 description: >
-  Draft and publish a batch of social media posts directly into Planable as drafts.
+  Draft a batch of social media posts directly into Planable as drafts.
   Use this skill whenever the user wants to generate multiple posts for a client,
   create content for a workspace, write a week's worth of posts, batch-create drafts,
   or says things like "draft posts for [client]", "create 5 posts about [topic]",
@@ -31,9 +31,9 @@ Before writing anything, confirm:
 - **Topic or brief** — what the posts should be about
 - **Number of posts** — how many drafts to create (default: 5 if not specified)
 - **Tone or angle** — optional; if not provided, use the platform's natural register
-- **Proposed schedule** — optional; if provided, space posts evenly across the range
+- **Proposed schedule** — optional; if provided, space posts evenly across the range. If the user wants dates but gives no range, call `get_posting_times` for the pages and use its suggested slots
 - **Labels** — optional; ask only if the user mentions them
-- **Team-only / internal note** — optional; default is false (visible to all workspace members)
+- **Team-only / internal note** — optional; leave it out to use the workspace's default (some workspaces keep new posts hidden from clients by default), and set it only if the user asks
 
 If the workspace name is ambiguous or not provided, call `list_workspaces` and show the options. Do not guess.
 
@@ -90,7 +90,8 @@ create_post(
   text,
   scheduledAt (if provided),
   labels (if provided),
-  teamOnly (default: false)
+  teamOnly (only if the user asks; omit to keep the workspace default),
+  mediaUrls / mediaIds (if provided)
 )
 ```
 
@@ -101,9 +102,17 @@ create_grouped_post(
   pageIds[],
   text,
   scheduledAt (if provided),
-  labels (if provided)
+  labels (if provided),
+  teamOnly (only if the user asks; omit to keep the workspace default),
+  mediaUrls / mediaIds (if provided)
 )
 ```
+
+`scheduledAt` only sets a proposed date: the post stays a draft. Pass `publishAtScheduledDate: true` only when the user explicitly asks to schedule the posts for publishing.
+
+`scheduledAt` is a UTC time (ISO 8601 ending in `Z`). Convert the times the user gives from the workspace timezone (`timezone` in the `get_posting_times` result) and say which timezone you used.
+
+Before scheduling posts for publishing, tell the user that publishing can still fail on the day: if the workspace requires approval (`approvalWorkflow` from `get_workspace_details` is not "none"), the posts must be approved before their date, and the page must still be connected.
 
 **Multiple platforms with adapted content:**
 Call `create_post` once per platform with the platform-specific version of the copy.
@@ -117,13 +126,13 @@ After all posts are created, report back:
 - Which workspace and page(s) they're in
 - Proposed schedule times (if any)
 - Any `validationErrors` returned (e.g., Instagram requires media — flag this clearly)
-- A direct note that posts are drafts only and will not publish until approved/scheduled in Planable
+- A direct note that posts are drafts only and will not publish until approved/scheduled in Planable — unless the user asked to schedule them for publishing: then list which posts will auto-publish and when
 
 ---
 
 ## Edge cases
 
-- **Media**: This skill creates text-only drafts by default. If the user provides a public image URL, pass it as `mediaUrl`. If they reference a file from their computer, explain that Planable requires a public URL and suggest uploading to Google Drive or similar first.
-- **Update coming**: Post editing is not yet available via the connector. If the user asks to revise an existing post, note this and suggest editing directly in Planable.
+- **Media**: This skill creates text-only drafts by default. Pass public image or video URLs as `mediaUrls`, or items already in the Planable media library as `mediaIds` (from `list_media`). For files on the user's computer, create the draft without media: in Claude chat the `create_post` result shows an upload card where the user picks the files for that post; in clients without the card, such as Claude Code, upload the files to the returned `mediaPicker.uploadUrl` as the result describes.
+- **Editing**: To revise a draft, call `update_post` (text, scheduledAt, labels, media, teamOnly). Published posts cannot be changed.
 - **Stories / Reels**: Supported via `classification` parameter. Ask the user if they want post, story, or reels format if the platform supports multiple (Instagram, TikTok, YouTube).
 - **Rate**: Create posts one at a time (not in bulk API calls) to surface any per-post validation errors clearly.

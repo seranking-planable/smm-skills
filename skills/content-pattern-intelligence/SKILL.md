@@ -60,28 +60,21 @@ list_pages(workspaceId) → get pageIds
 get_page_metrics(workspaceId, pageIds, startDate, endDate)
 ```
 
-For each page in the response, check `lastMetricAt` (the timestamp of the last successful metrics fetch).
+The analysis uses post-level metrics, so check their freshness: for each page, call `get_post_metrics_summary(workspaceId, [pageId], startDate, endDate)` and read `metricsFetchedAt.latest` (when the post metrics were last fetched). Keep its `totalPosts` for Step 2c.
 
-- If `lastMetricAt` is **within the last 3 hours** — data is fresh. Skip the refresh entirely. Proceed to Step 2c.
-- If `lastMetricAt` is **older than 3 hours** or missing — data is stale. Proceed to Step 2b.
+- If it is **within the last 3 hours** — data is fresh. Skip the refresh entirely. Proceed to Step 2c.
+- If it is **older than 3 hours** or missing — data is stale. Proceed to Step 2b.
 
 The `posts` field in the `get_page_metrics` response tells you the post count per page for the window. Record it now — use it to plan chunk size in Step 2c so you're not choosing a strategy inside the fetch loop.
 
 #### Step 2b: Refresh stale data — with platform-aware patience
 
-Call `refresh_page_metrics` for the stale pages.
+Call `refresh_post_metrics` for the stale pages and the date range (the analysis uses post-level metrics), plus `refresh_page_metrics` if you also need fresh page totals.
 
-For **Instagram pages specifically**, tell the user before refreshing:
-> "Instagram metrics are syncing — this can take 1-2 minutes. I'll check back once the data is ready."
+Both tools only queue a sync and return right away. Reading again immediately still returns the previous data; new data lands after a few minutes (Instagram is the slowest). Tell the user:
+> "Metrics are syncing — this can take a few minutes. I can run the analysis now with the most recent stored data, or check again in a few minutes."
 
-Then wait before re-reading:
-- **Instagram:** wait 60 seconds before calling `get_page_metrics` again
-- **All other platforms:** wait 15-20 seconds
-
-After waiting, call `get_page_metrics` again and re-check `lastMetricAt`:
-- If `lastMetricAt` is now more recent than the refresh call — sync completed. Proceed to Step 2c.
-- If `lastMetricAt` is still older — sync is still in progress. Wait another 30 seconds and retry once more.
-- After 2 retries with no update — tell the user: "Instagram data is still syncing. You can try again in a few minutes, or I can run the analysis now using the most recent available data." Let the user decide.
+Let the user decide. When checking again, call `get_post_metrics_summary` for the same pages and range and compare `metricsFetchedAt` with the time of the refresh: if it is newer, the sync completed. If it has not changed after a few minutes, the sync did not run: continue with the stored data and say how old it is in the Data notes. Proceed to Step 2c.
 
 #### Step 2c: Fetch post-level metrics (volume-aware)
 
@@ -105,7 +98,7 @@ get_post_metrics_summary(workspaceId, [pageId], startDate, endDate)
 | 41–80 | ~6 chunks of 2 weeks each |
 | 80+ | 1-week chunks |
 
-**3. Run all chunks for that page in parallel.**
+**3. Run the chunks for that page in parallel, at most 3 at a time.** The analytics tools accept about 3 calls per second; extra calls are rejected with a "wait and retry" error, which is not a timeout, so retry those instead of skipping the range.
 
 **4. On timeout for any chunk — bisect:**
 - Halve the failing window and retry both halves.
@@ -113,6 +106,8 @@ get_post_metrics_summary(workspaceId, [pageId], startDate, endDate)
   - Skip that range entirely.
   - Record it in Data notes: e.g. "1 IG post in May 12–14 likely missing — endpoint timed out at < 48h window."
   - Do not retry further — the rest of the dataset is still usable.
+
+After the chunks for a page are done, compare the number of posts fetched with that page's `totalPosts`. If fewer came back, fetch the missing date ranges in smaller chunks, and record any gap that remains in Data notes.
 
 Repeat for each page before moving on to Step 3.
 

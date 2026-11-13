@@ -51,7 +51,7 @@ Confirm the client domain, competitors, the Planable workspace, and what the eng
 - `list_pages(workspaceId)` — the connected channels.
 - `get_page_metrics_summary(workspaceId, pageIds, startDate, endDate)` — **account-level** reach: audience (followers), total page impressions, and engagement rate. This is the size-of-presence number.
 - `get_post_metrics_summary(workspaceId, pageIds, startDate, endDate)` — **published-content** performance in the window (impressions/engagement *of the posts*). These two impression figures are different scopes (page reach vs post reach) — report them separately and don't add or conflate them.
-- `get_post_metrics(workspaceId, pageIds, ..., limit: 5)` — current top posts (what already resonates).
+- `get_post_metrics(workspaceId, pageIds, ...)` — current top posts (what already resonates): page through the period and rank the posts by engagement (it returns the newest posts first, so `limit: 5` alone gives the 5 newest, not the top 5).
 - `list_posts(workspaceId, ...)` — current cadence and how much is actually scheduled vs idle.
 - Read it as a baseline: cadence, engagement rate, platform mix, and the obvious gaps.
 

@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "planable-smm",
   "displayName": "Planable SMM",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Production-ready skills for social media managers using Planable: draft post batches, clear the approval queue, audit the calendar, build monthly performance reports, compare clients, surface content patterns, and — with SE Ranking connected — turn SEO and AI-search gaps into social campaigns, coordinate page rewrites, run local/GBP visibility, build onboarding proposals, and generate unified SEO + AI + social reports.",
   "author": {
     "name": "Planable",

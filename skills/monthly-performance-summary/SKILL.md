@@ -51,12 +51,13 @@ get_page_metrics_summary(workspaceId, pageIds, startDate, endDate)
 get_post_metrics_summary(workspaceId, pageIds, startDate, endDate)
 ```
 
-For top post highlights, also call:
-```
-get_post_metrics(workspaceId, pageIds, startDate, endDate, limit: 5)
-```
+For top post highlights, page through `get_post_metrics(workspaceId, pageIds, startDate, endDate)` for the whole period, then rank the posts by engagement and take the top 5. It returns the newest posts first, not the best ones, so `limit: 5` alone would give the 5 newest posts. Check that the number of posts fetched matches `totalPosts` from `get_post_metrics_summary`; if it is lower, fetch page by page or over shorter date ranges, and mention any gap in the notes.
 
-**Note on unsupported platforms:** `get_page_metrics` returns `unsupportedPages` for Google My Business and Threads — note these in the report as "data not available."
+**Note on unsupported platforms:** `get_page_metrics` returns `unsupportedPages` for Google My Business and Threads — note these in the report as "data not available." X is not missing data: `get_page_metrics_summary` leaves it out of its totals (it shows up in `unsupportedPages` there), and its figures cover only the posts published through Planable — say so in the report rather than calling X "data not available".
+
+**Analytics add-on:** if a metrics tool rejects because the analytics add-on is not active for the workspace, tell the user plainly and offer Mode B: they can upload a CSV export instead.
+
+**Data freshness:** if `metricsFetchedAt` is old, offer `refresh_page_metrics` and `refresh_post_metrics`. They only queue a sync, so new data lands after a few minutes; offer to build the report with the stored numbers meanwhile. If `metricsFetchedAt` has not changed after a few minutes, the sync did not run: carry on with the stored numbers and say how old they are.
 
 ### Step 3: Structure the report → go to [Report Format](#report-format)
 
