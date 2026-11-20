@@ -148,7 +148,7 @@ Keep bullets short and specific. No generic advice.
 Small, muted section at the bottom. Flag data gaps, unsupported platforms, report freshness.
 
 #### 7. Footer
-"Generated with Planable + Claude · [date]"
+"Generated with Planable · [date]"
 
 ---
 
